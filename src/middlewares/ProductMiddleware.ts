@@ -1,16 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 
-/**
- * @TODO
- * - popular banco a partir de arquivo .CSV
- * - listener do rabbitmq
- * - validações
- * - regra de validação de estoque
- * - swagger (se der tempo)
- * - docker compose
- * - dodumentação
- */
-
 class ProductMiddleware {
     static validateBeforeSave (req: Request, res: Response, next: NextFunction) {
 

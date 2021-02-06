@@ -17,19 +17,20 @@ class OrderMiddleware {
         let noQttCount = 0;
         let noPriceCount = 0;
 
-        for (let index = 0; index < body.products.length; index++) {
-            const product = body.products[index];
 
-            if(!product.name) {
-                noNameCount++;
-            }
+        for (const product of body.products) {
+            if(product) {
+                if(!product.name) {
+                    noNameCount++;
+                }
 
-            if(!product.quantity || isNaN(product.quantity) || product.quantity < 0) {
-                noQttCount++;
-            }
+                if(!product.quantity || isNaN(product.quantity) || product.quantity < 0) {
+                    noQttCount++;
+                }
 
-            if(!product.price || isNaN(product.price) || product.price < 0) {
-                noPriceCount++;
+                if(!product.price || isNaN(product.price) || product.price < 0) {
+                    noPriceCount++;
+                }
             }
         }
 

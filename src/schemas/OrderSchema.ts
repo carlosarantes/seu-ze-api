@@ -32,8 +32,7 @@ export let OrderSchema: Schema = new Schema({
 
 OrderSchema.pre('save', async function(this: IOrder, next) {
     let total = 0;
-    for (let index = 0; index < this.products.length; index++) {
-        const product = this.products[index];
+    for (const product of this.products) {
         total += product.quantity * product.price;
     }
 

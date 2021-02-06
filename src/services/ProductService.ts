@@ -24,7 +24,7 @@ class ProductService {
     }
 
     async create(payload: any) {
-        let product = await Product.findOne({ name : payload.name });
+        const product = await Product.findOne({ name : payload.name });
         if(product) {
             return await this.update(product.id, payload);
         }
@@ -61,7 +61,7 @@ class ProductService {
     }
 
     async incrementQtt(name: string) {
-        let product = await Product.findOne({ name });
+        const product = await Product.findOne({ name });
         if(!product) {
             throw new Error("Este produto não existe.");
         }
@@ -71,7 +71,7 @@ class ProductService {
     }
 
     async decrementQtt(name: string) {
-        let product = await Product.findOne({ name });
+        const product = await Product.findOne({ name });
         if(!product) {
             throw new Error("Este produto não existe.");
         }

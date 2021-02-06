@@ -7,7 +7,7 @@ services:
     environment: 
       - APP_NAME=Loja do Seu Zé
       - PORT=3334
-      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_URI=mongodb://mongo:27017?retryWrites=true
       - RABBITMQ_URI=amqp://rabbitmq
     ports:
       - 3334:3334
@@ -26,6 +26,7 @@ services:
       - 27017:27017
     networks:
       - app-network
+    restart: always
 
   rabbitmq:
     image: rabbitmq:3.8-management

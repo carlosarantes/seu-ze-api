@@ -1,7 +1,7 @@
 import * as Amqp from "amqp-ts";
 
 class RabbitMQ {
-    
+
     connection: Amqp.Connection;
 
     openConnection() {
@@ -10,16 +10,16 @@ class RabbitMQ {
 
     initialConfig() {
         const stockExchange = this.connection.declareExchange("stock", "direct");
-        this.connection.declareQueue("increment").bind(stockExchange, "incremented"); 
+        this.connection.declareQueue("increment").bind(stockExchange, "incremented");
         this.connection.declareQueue("decrement").bind(stockExchange, "decremented");
 
         const orderExchange = this.connection.declareExchange("orders", "direct");
-        this.connection.declareQueue("orders").bind(orderExchange, "make-order"); 
+        this.connection.declareQueue("orders").bind(orderExchange, "make-order");
 
         this.connection.completeConfiguration();
     }
 
-    consume(queueName: string, callback: Function) {
+    consume(queueName: string, callback: (payload: any) => void) {
 
         if(!this.connection) {
             this.openConnection();
@@ -35,10 +35,10 @@ class RabbitMQ {
                 message.ack();
             } catch (e) {
                 const errorContent = { payload : message.getContent(), error : e.message };
-                errorQueue.send(new Amqp.Message(JSON.stringify(errorContent))); 
+                errorQueue.send(new Amqp.Message(JSON.stringify(errorContent)));
                 message.ack();
             }
-        }); 
+        });
     }
 }
 
