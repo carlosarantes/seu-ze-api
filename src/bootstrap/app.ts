@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import DBConnection from "../providers/DBConnection";
+import QueueConsumer from "../jobs/QueueConsumer";
 import routes from "../routes";
 
 class Application {
@@ -10,6 +11,7 @@ class Application {
         this.app = express();
         this.middlewares();
         this.routes();
+        QueueConsumer.startConsuming();
     }
 
     middlewares():void {

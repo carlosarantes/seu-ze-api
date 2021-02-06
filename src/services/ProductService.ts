@@ -24,7 +24,20 @@ class ProductService {
     }
 
     async create(payload: any) {
+        let product = await Product.findOne({ name : payload.name });
+        if(product) {
+            console.log('PRODUTO COM ESSE NOME JA EXISTE..VOU ATUALIZAR ENTÃO...');
+            return await this.update(product.id, payload);
+        }
+
         return await Product.create(payload);
+    }
+
+    async populateAtOnce(payload: any[]) {
+        const qtd = await Product.count();
+        if(!qtd) {
+           return await Product.create(payload);
+        }
     }
 
     async update(id: string, payload: any) {
@@ -46,6 +59,32 @@ class ProductService {
         if(!deleted) {
             throw new Error("Não foi possível deletar, provavelmente este registro não existe.");
         }
+    }
+
+    async incrementQtt(name: string) {
+        let product = await Product.findOne({ name });
+        if(!product) {
+            throw new Error("Este produto não existe.");
+        }
+
+        product.quantity = product.quantity + 1;
+        product.save();
+        console.log('00-PRODUTO ATUALIZADO COM SUCESSO.');
+    }
+
+    async decrementQtt(name: string) {
+        let product = await Product.findOne({ name });
+        if(!product) {
+            throw new Error("Este produto não existe.");
+        }
+
+        if(!product.quantity) {
+            throw new Error("Não é possível decrementar pois esse produto não possui uma quantidade válida.");
+        }
+
+        product.quantity = product.quantity - 1;
+        product.save();
+        console.log('99-PRODUTO ATUALIZADO COM SUCESSO.');
     }
 }
 
