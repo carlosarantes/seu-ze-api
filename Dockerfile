@@ -1,6 +1,11 @@
 FROM node:14-alpine
 
-COPY . .
-RUN npm i
+WORKDIR /usr/node_app
 
-CMD [ "npm", "run", "dev" ]
+COPY package.json .
+RUN npm install
+
+ADD . /usr/node_app
+RUN npm run build
+
+CMD [ "npm", "run", "start" ]
