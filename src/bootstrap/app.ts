@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from "express";
-import DBConnection from "../services/DBConnection";
+import DBConnection from "../providers/DBConnection";
 import routes from "../routes";
 
 class Application {
@@ -12,7 +12,7 @@ class Application {
         this.routes();
     }
 
-    middlewares():void {3
+    middlewares():void {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.json());
     }

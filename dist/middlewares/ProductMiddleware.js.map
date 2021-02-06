@@ -1,0 +1,1 @@
+{"version":3,"file":"ProductMiddleware.js","sourceRoot":"","sources":["../../src/middlewares/ProductMiddleware.ts"],"names":[],"mappings":";;AAEA,MAAM,iBAAiB;IACnB,MAAM,CAAC,QAAQ,CAAE,GAAY,EAAE,GAAa,EAAE,IAAkB;QAE5D,OAAO,IAAI,EAAE,CAAC;IAClB,CAAC;CACJ;AAED,kBAAe,iBAAiB,CAAC"}

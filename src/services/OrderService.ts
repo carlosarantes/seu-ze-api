@@ -1,8 +1,6 @@
-import { Request, Response } from "express";
 import { Order } from "../schemas/OrderSchema";
 
-class OrderController {
-
+class OrderService {
     async findAll(req: Request, res: Response): Promise<Response> {
         const orders = await Order.find();
         return res.status(200).json({ "data" : orders });
@@ -34,4 +32,4 @@ class OrderController {
     }
 }
 
-export default new OrderController();
+export default new OrderService();

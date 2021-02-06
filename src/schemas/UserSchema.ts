@@ -1,6 +1,13 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Document } from "mongoose";
+import * as bcrypt from "bcryptjs";
 
-export var ProductSchema: Schema = new Schema({
+ interface IUser extends Document {
+    name: string;
+    email: string;
+    password: string;
+}
+
+export let UserSchema: Schema = new Schema({
     name: {
         type: String,
         required: true
@@ -9,9 +16,18 @@ export var ProductSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    password: String,
+    password: {
+        type: String,
+        select: false
+    }
 }, { timestamps: true });
 
-const Product = model('Product', ProductSchema);
+UserSchema.pre('save', async function(this: IUser, next) {
+    const hash = await bcrypt.hash(this.password, 10);
+    this.password = hash;
+    next();
+});
 
-export { Product };
+const User = model<IUser>('User', UserSchema);
+
+export { User };

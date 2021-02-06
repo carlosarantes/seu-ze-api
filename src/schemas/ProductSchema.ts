@@ -1,6 +1,12 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Document } from "mongoose";
 
-export var ProductSchema: Schema = new Schema({
+interface IProduct extends Document {
+    name: string;
+    quantity: number;
+    price: number;
+}
+
+export let ProductSchema: Schema = new Schema({
     name: {
         type: String,
         required: true
@@ -15,6 +21,6 @@ export var ProductSchema: Schema = new Schema({
     }
 }, { timestamps: true });
 
-const Product = model('Product', ProductSchema);
+const Product = model<IProduct>('Product', ProductSchema);
 
 export { Product };

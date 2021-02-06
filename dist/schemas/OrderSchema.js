@@ -1,11 +1,8 @@
-import { model, Schema, Document } from "mongoose";
-
-interface IOrder extends Document {
-    products: any[];
-    total: number;
-}
-
-export let OrderSchema: Schema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Order = exports.OrderSchema = void 0;
+const mongoose_1 = require("mongoose");
+exports.OrderSchema = new mongoose_1.Schema({
     products: [
         {
             name: {
@@ -23,11 +20,10 @@ export let OrderSchema: Schema = new Schema({
         }
     ],
     total: {
-        type : Number,
+        type: Number,
         default: 0
     }
 }, { timestamps: true });
-
-const Order = model<IOrder>('Order', OrderSchema);
-
-export { Order };
+const Order = mongoose_1.model('Order', exports.OrderSchema);
+exports.Order = Order;
+//# sourceMappingURL=OrderSchema.js.map
