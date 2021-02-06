@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 
 class OrderMiddleware {
     static validateBeforeSave (req: Request, res: Response, next: NextFunction) {
-
         const body = req.body;
         const errors = [];
 
@@ -14,22 +13,22 @@ class OrderMiddleware {
             errors.push("Produtos deve ser um array de objetos.");
         }
 
-
         let noNameCount = 0;
         let noQttCount = 0;
         let noPriceCount = 0;
 
-        for (let index = 0; index < body.products; index++) {
+        for (let index = 0; index < body.products.length; index++) {
             const product = body.products[index];
+
             if(!product.name) {
                 noNameCount++;
             }
 
-            if(!product.quantity) {
+            if(!product.quantity || isNaN(product.quantity) || product.quantity < 0) {
                 noQttCount++;
             }
 
-            if(!product.price) {
+            if(!product.price || isNaN(product.price) || product.price < 0) {
                 noPriceCount++;
             }
         }

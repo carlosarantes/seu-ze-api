@@ -5,7 +5,7 @@ class RabbitMQ {
     connection: Amqp.Connection;
 
     openConnection() {
-         this.connection = new Amqp.Connection("amqp://localhost");
+        this.connection = new Amqp.Connection(process.env.RABBITMQ_URI);
     }
 
     initialConfig() {

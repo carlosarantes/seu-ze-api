@@ -5,7 +5,7 @@ class ProductController {
     async findAll(req: Request, res: Response): Promise<Response> {
         try {
             const products = await ProductService.findAll();
-            return res.json({ "data" : products });
+            return res.json({ "products" : products });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
@@ -15,7 +15,7 @@ class ProductController {
         try {
             const { id } = req.params;
             const product = await ProductService.findById(id)
-            return res.json({ "data" : product });
+            return res.json({ "product" : product });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
@@ -25,7 +25,7 @@ class ProductController {
         try {
             const { name } = req.params;
             const product = await ProductService.findByName(name);
-            return res.json({ "data" : product });
+            return res.json({ "product" : product });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
@@ -35,7 +35,7 @@ class ProductController {
         try {
             const body = req.body;
             const product = await ProductService.create(body);
-            return res.status(201).json({ "data" : product });
+            return res.status(201).json({ "product" : product });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
@@ -46,7 +46,7 @@ class ProductController {
             const { id } = req.params;
             const body = req.body;
             const product = await ProductService.update(id, body);
-            return res.json({ "data" : product });
+            return res.json({ "product" : product });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }

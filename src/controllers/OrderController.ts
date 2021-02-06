@@ -6,7 +6,7 @@ class OrderController {
     async findAll(req: Request, res: Response): Promise<Response> {
         try {
             const orders = await OrderService.findAll();
-            return res.json({ "data" : orders });
+            return res.json({ "orders" : orders });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
@@ -16,7 +16,7 @@ class OrderController {
         try {
             const { id } = req.params;
             const order = await OrderService.findById(id);
-            return res.json({ "data" : order });
+            return res.json({ "order" : order });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
@@ -26,7 +26,7 @@ class OrderController {
         try {
             const body = req.body;
             const order = await OrderService.create(body);
-            return res.status(201).json({ "data" : order });
+            return res.status(201).json({ "order" : order });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
@@ -37,7 +37,7 @@ class OrderController {
             const { id } = req.params;
             const body = req.body;
             const order = await OrderService.update(id, body);
-            return res.json({ "data" : order });
+            return res.json({ "order" : order });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }

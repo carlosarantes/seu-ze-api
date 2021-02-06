@@ -26,7 +26,6 @@ class ProductService {
     async create(payload: any) {
         let product = await Product.findOne({ name : payload.name });
         if(product) {
-            console.log('PRODUTO COM ESSE NOME JA EXISTE..VOU ATUALIZAR ENTÃO...');
             return await this.update(product.id, payload);
         }
 
@@ -69,7 +68,6 @@ class ProductService {
 
         product.quantity = product.quantity + 1;
         product.save();
-        console.log('00-PRODUTO ATUALIZADO COM SUCESSO.');
     }
 
     async decrementQtt(name: string) {
@@ -84,7 +82,6 @@ class ProductService {
 
         product.quantity = product.quantity - 1;
         product.save();
-        console.log('99-PRODUTO ATUALIZADO COM SUCESSO.');
     }
 }
 

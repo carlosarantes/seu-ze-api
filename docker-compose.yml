@@ -3,20 +3,29 @@ version: "3"
 services: 
   app:
     build: .
-  restart: on-failure
-  networks:
-    - app-network
-  links: 
-    - mongo
-    - rabbitmq
-  depends_on: 
-    - mongo
-    - rabbitmq
+    restart: on-failure
+    environment: 
+      - APP_NAME=Loja do Seu Zé
+      - PORT=3334
+      - MONGO_URI=mongodb://mongo:27017
+      - RABBITMQ_URI=amqp://rabbitmq
+    ports:
+      - 3334:3334
+    networks:
+      - app-network
+    links: 
+      - mongo
+      - rabbitmq
+    depends_on: 
+      - mongo
+      - rabbitmq
 
   mongo:
     image: mongo
     ports: 
       - 27017:27017
+    networks:
+      - app-network
 
   rabbitmq:
     image: rabbitmq:3.8-management
