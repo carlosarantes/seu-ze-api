@@ -29,51 +29,37 @@ class ProductController {
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
-
-       // return res.status(200).json({ "message" : "Created successfully" });
     }
 
     async create(req: Request, res: Response): Promise<Response> {
         try {
-
+            const body = req.body;
+            const product = await ProductService.create(body);
+            return res.status(201).json({ "data" : product });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
-
-       /*
-        const { body } = req.body;
-        const order = await Product.create(body);
-        return res.status(201).json({ "data" :  order });
-        */
     }
 
     async update(req: Request, res: Response): Promise<Response> {
         try {
-
+            const { id } = req.params;
+            const body = req.body;
+            const product = await ProductService.update(id, body);
+            return res.json({ "data" : product });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
-
-        /*
-        const { id } = req.params;
-        const { body } = req.body;
-        const order = await Product.updateOne({ id }, { $set : body});
-        return res.status(200).json({ "data" : order });
-        */
     }
 
     async delete(req: Request, res: Response): Promise<Response> {
         try {
-
+            const { id } = req.params;
+            await ProductService.delete(id);
+            return res.status(200).json({ "message" : "Removed successfully" });
         } catch (e) {
             return res.status(400).json({ "message" : e.message });
         }
-
-        /*
-        const { id } = req.params;
-        await Product.deleteOne({ id });
-        return res.status(200).json({ "message" : "Removed successfully" });
-        */
     }
 }
 

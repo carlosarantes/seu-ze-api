@@ -1,34 +1,42 @@
 import { Order } from "../schemas/OrderSchema";
 
 class OrderService {
-    async findAll(req: Request, res: Response): Promise<Response> {
-        const orders = await Order.find();
-        return res.status(200).json({ "data" : orders });
+    async findAll() {
+        return await Order.find();
     }
 
-    async findById(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
+    async findById(id: string) {
         const order = await Order.findById(id);
-        return res.status(200).json({ "data" : order });
+        if(!order) {
+            throw new Error("Pedido não encontrado.");
+        }
+
+        return order;
     }
 
-    async create(req: Request, res: Response): Promise<Response> {
-        const { body } = req.body;
-        const order = await Order.create(body);
-        return res.status(201).json({ "data" :  order });
+    async create(payload: any) {
+        return await Order.create(payload);
     }
 
-    async update(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
-        const { body } = req.body;
-        const order = await Order.updateOne({ id }, { $set : body});
-        return res.status(200).json({ "data" : order });
+    async update(id: string, payload: any) {
+        let updated = await Order.findByIdAndUpdate(id, payload).lean();
+        if(!updated) {
+            throw new Error("Ocorreu um erro ao atualizar, talvez o registro não exista.");
+        }
+
+        updated = {
+            ...updated,
+            ...payload
+        };
+
+        return updated;
     }
 
-    async delete(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
-        await Order.deleteOne({ id });
-        return res.status(200).json({ "message" : "Removed successfully" });
+    async delete(id: string) {
+        const deleted = await Order.findByIdAndDelete(id);
+        if(!deleted) {
+            throw new Error("Não foi possível deletar, provavelmente este registro não existe.");
+        }
     }
 }
 

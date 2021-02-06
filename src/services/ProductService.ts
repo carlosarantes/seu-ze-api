@@ -1,38 +1,51 @@
 import { Product } from "../schemas/ProductSchema";
 
 class ProductService {
-    async findAll(req: Request, res: Response): Promise<Response> {
-        const orders = await Product.find();
-        return res.status(200).json({ "data" : orders });
+    async findAll() {
+        return await Product.find();
     }
 
-    async findById(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
-        const order = await Product.findById(id);
-        return res.status(200).json({ "data" : order });
+    async findById(id: string) {
+        const product = await Product.findById(id);
+        if(!product) {
+            throw new Error("Produto não encontrado.");
+        }
+
+        return product;
     }
 
-    async findByNmae(req: Request, res: Response): Promise<Response> {
-        return res.status(200).json({ "message" : "Created successfully" });
+    async findByName(name: string) {
+        const product = await Product.find({ name });
+        if(!product) {
+            throw new Error("Produto não encontrado.");
+        }
+
+        return product;
     }
 
-    async create(req: Request, res: Response): Promise<Response> {
-        const { body } = req.body;
-        const order = await Product.create(body);
-        return res.status(201).json({ "data" :  order });
+    async create(payload: any) {
+        return await Product.create(payload);
     }
 
-    async update(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
-        const { body } = req.body;
-        const order = await Product.updateOne({ id }, { $set : body});
-        return res.status(200).json({ "data" : order });
+    async update(id: string, payload: any) {
+        let updated = await Product.findByIdAndUpdate(id, payload).lean();
+        if(!updated) {
+            throw new Error("Ocorreu um erro ao atualizar, talvez o registro não exista.");
+        }
+
+        updated = {
+            ...updated,
+            ...payload
+        };
+
+        return updated;
     }
 
-    async delete(req: Request, res: Response): Promise<Response> {
-        const { id } = req.params;
-        await Product.deleteOne({ id });
-        return res.status(200).json({ "message" : "Removed successfully" });
+    async delete(id: string) {
+        const deleted = await Product.findByIdAndDelete(id);
+        if(!deleted) {
+            throw new Error("Não foi possível deletar, provavelmente este registro não existe.");
+        }
     }
 }
 
