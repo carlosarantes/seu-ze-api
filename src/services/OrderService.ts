@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Order } from "../schemas/OrderSchema";
 import { Product } from "../schemas/ProductSchema";
+import HttpError from "../exceptions/HttpError";
 
 class OrderService {
     async findAll() {
@@ -10,7 +11,7 @@ class OrderService {
     async findById(id: string) {
         const order = await Order.findById(id);
         if(!order) {
-            throw new Error("Pedido não encontrado.");
+            throw new HttpError("Pedido não encontrado.", 404);
         }
 
         return order;
@@ -29,15 +30,15 @@ class OrderService {
                 if(productData) {
                     const product = await Product.findOne({ name : productData.name });
                     if(!product) {
-                        throw new Error(`Não é possível realizar o pedido pois o produto ${productData.name} não existe. Confira a lista de produtos.`);
+                        throw new HttpError(`Não é possível realizar o pedido pois o produto ${productData.name} não existe. Confira a lista de produtos.`, 422);
                     }
 
                     if(!product.quantity || product.quantity <= 0) {
-                        throw new Error(`Não é possível realizar o pedido pois o produto ${productData.name} não está disponível em estoque.`);
+                        throw new HttpError(`Não é possível realizar o pedido pois o produto ${productData.name} não está disponível em estoque.`, 422);
                     }
 
                     if(product.quantity < productData.quantity) {
-                        throw new Error(`Não é possível pedir ${productData.quantity}x do produto ${productData.name}. Disponível apenas ${product.quantity}.`)
+                        throw new HttpError(`Não é possível pedir ${productData.quantity}x do produto ${productData.name}. Disponível apenas ${product.quantity}.`, 422)
                     }
 
                     product.quantity = product.quantity - productData.quantity;
@@ -62,7 +63,7 @@ class OrderService {
     async update(id: string, payload: any) {
         let updated = await Order.findByIdAndUpdate(id, payload).lean();
         if(!updated) {
-            throw new Error("Ocorreu um erro ao atualizar, talvez o registro não exista.");
+            throw new HttpError("Ocorreu um erro ao atualizar, talvez o registro não exista.", 404);
         }
 
         updated = {
@@ -76,7 +77,7 @@ class OrderService {
     async delete(id: string) {
         const deleted = await Order.findByIdAndDelete(id);
         if(!deleted) {
-            throw new Error("Não foi possível deletar, provavelmente este registro não existe.");
+            throw new HttpError("Não foi possível deletar, provavelmente este registro não existe.", 404);
         }
     }
 }

@@ -7,7 +7,9 @@ class UserController {
             const users = await UserService.findAll();
             return res.status(200).json({ "data" : users });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -17,7 +19,9 @@ class UserController {
             const user = await UserService.findById(id);
             return res.status(200).json({ "data" : user });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -27,7 +31,9 @@ class UserController {
             const result = await UserService.login(email, password);
             return res.send(result);
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -37,7 +43,9 @@ class UserController {
             const user = await UserService.register(body);
             return res.status(201).json({ "data" :  user });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -48,7 +56,9 @@ class UserController {
             const user = await UserService.update(id, body);
             return res.status(200).json({ "data" : user });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -58,7 +68,9 @@ class UserController {
             await UserService.delete(id);
             return res.status(200).json({ "message" : "Removed successfully" });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 }
