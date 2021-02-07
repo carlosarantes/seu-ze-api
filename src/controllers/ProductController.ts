@@ -7,7 +7,9 @@ class ProductController {
             const products = await ProductService.findAll();
             return res.json({ "products" : products });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -17,7 +19,9 @@ class ProductController {
             const product = await ProductService.findById(id)
             return res.json({ "product" : product });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -27,7 +31,9 @@ class ProductController {
             const product = await ProductService.findByName(name);
             return res.json({ "product" : product });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -37,7 +43,9 @@ class ProductController {
             const product = await ProductService.create(body);
             return res.status(201).json({ "product" : product });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -48,7 +56,9 @@ class ProductController {
             const product = await ProductService.update(id, body);
             return res.json({ "product" : product });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -58,7 +68,9 @@ class ProductController {
             await ProductService.delete(id);
             return res.status(200).json({ "message" : "Removed successfully" });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 }

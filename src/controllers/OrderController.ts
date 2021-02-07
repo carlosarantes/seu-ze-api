@@ -8,7 +8,9 @@ class OrderController {
             const orders = await OrderService.findAll();
             return res.json({ "orders" : orders });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -18,7 +20,9 @@ class OrderController {
             const order = await OrderService.findById(id);
             return res.json({ "order" : order });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -28,7 +32,9 @@ class OrderController {
             const order = await OrderService.create(body);
             return res.status(201).json({ "order" : order });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -39,7 +45,9 @@ class OrderController {
             const order = await OrderService.update(id, body);
             return res.json({ "order" : order });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 
@@ -49,7 +57,9 @@ class OrderController {
             await OrderService.delete(id);
             return res.json({ "message" : "Removed successfully." });
         } catch (e) {
-            return res.status(400).json({ "message" : e.message });
+            const statusCode = e.status || 400;
+            const message = e.message || "Ocorreu um erro desconhecido";
+            return res.status(statusCode).json({ message });
         }
     }
 }

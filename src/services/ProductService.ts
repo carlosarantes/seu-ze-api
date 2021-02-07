@@ -1,4 +1,5 @@
 import { Product } from "../schemas/ProductSchema";
+import HttpError from "../exceptions/HttpError";
 
 class ProductService {
     async findAll() {
@@ -8,7 +9,7 @@ class ProductService {
     async findById(id: string) {
         const product = await Product.findById(id);
         if(!product) {
-            throw new Error("Produto não encontrado.");
+            throw new HttpError("Produto não encontrado.", 404);
         }
 
         return product;
@@ -17,7 +18,7 @@ class ProductService {
     async findByName(name: string) {
         const product = await Product.find({ name });
         if(!product) {
-            throw new Error("Produto não encontrado.");
+            throw new HttpError("Produto não encontrado.", 404);
         }
 
         return product;
@@ -42,7 +43,7 @@ class ProductService {
     async update(id: string, payload: any) {
         let updated = await Product.findByIdAndUpdate(id, payload).lean();
         if(!updated) {
-            throw new Error("Ocorreu um erro ao atualizar, talvez o registro não exista.");
+            throw new HttpError("Ocorreu um erro ao atualizar, talvez o registro não exista.", 404);
         }
 
         updated = {
@@ -56,14 +57,14 @@ class ProductService {
     async delete(id: string) {
         const deleted = await Product.findByIdAndDelete(id);
         if(!deleted) {
-            throw new Error("Não foi possível deletar, provavelmente este registro não existe.");
+            throw new HttpError("Não foi possível deletar, provavelmente este registro não existe.", 404);
         }
     }
 
     async incrementQtt(name: string) {
         const product = await Product.findOne({ name });
         if(!product) {
-            throw new Error("Este produto não existe.");
+            throw new HttpError("Este produto não existe.", 404);
         }
 
         product.quantity = product.quantity + 1;
@@ -73,11 +74,11 @@ class ProductService {
     async decrementQtt(name: string) {
         const product = await Product.findOne({ name });
         if(!product) {
-            throw new Error("Este produto não existe.");
+            throw new HttpError("Este produto não existe.", 404);
         }
 
         if(!product.quantity) {
-            throw new Error("Não é possível decrementar pois esse produto não possui uma quantidade válida.");
+            throw new HttpError("Não é possível decrementar pois esse produto não possui uma quantidade válida.", 422);
         }
 
         product.quantity = product.quantity - 1;

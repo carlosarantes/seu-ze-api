@@ -1,5 +1,6 @@
 import { User } from "../schemas/UserSchema";
 import * as bcrypt from "bcryptjs";
+import HttpError from "../exceptions/HttpError";
 
 import * as jwt from "jsonwebtoken";
 import authConfig from "../config/auth.json";
@@ -19,7 +20,7 @@ class UserService {
     async findById(id: string) {
         const user = await User.findById(id);
         if(!user) {
-            throw new Error("User not found.");
+            throw new HttpError("User not found.", 404);
         }
 
         return user;
@@ -29,11 +30,11 @@ class UserService {
         const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
-            throw new Error("User not found.");
+            throw new HttpError("User not found.", 404);
         }
 
         if(!await bcrypt.compare(password, user.password)) {
-            throw new Error("Invalid password.");
+            throw new HttpError("Invalid password.", 401);
         }
 
         user.password = undefined;
@@ -44,7 +45,7 @@ class UserService {
 
     async register(payload: any) {
         if (await User.findOne({ email : payload.email })) {
-            throw new Error("User already exists.");
+            throw new HttpError("User already exists.", 403);
         }
 
         const user = await User.create(payload);
@@ -57,7 +58,7 @@ class UserService {
     async update(id: string, payload: any) {
         let updated = await User.findByIdAndUpdate(id, payload).lean();
         if(!updated) {
-            throw new Error("Ocorreu um erro ao atualizar, talvez o registro não exista.");
+            throw new HttpError("Ocorreu um erro ao atualizar, talvez o registro não exista.", 404);
         }
 
         updated = {
@@ -71,7 +72,7 @@ class UserService {
     async delete(id: string) {
         const deleted = await User.findByIdAndDelete(id);
         if(!deleted) {
-            throw new Error("Não foi possível deletar, provavelmente este registro não existe.");
+            throw new HttpError("Não foi possível deletar, provavelmente este registro não existe.", 404);
         }
     }
 }
